@@ -7,45 +7,68 @@ use GuzzleHttp\Client;
 
 class TriviaController extends Controller
 {
+
+    public function index()
+    {
+        return view('trivia.index');
+    }
+
     public function fetchQuestions(Request $request)
     {
-        // Retrieve parameters from the form submission
         $name = $request->input('fullName');
         $amount = $request->input('questions-num');
         $difficulty = $request->input('difficulty');
         $type = $request->input('type');
-        // print_r($name);die;
-        // Make a request to the Open Trivia Database API
-        
 
+        $questions = $this->getQuestionsFromApi( $amount, $difficulty, $type );
+        // return $questions;
+        return view('trivia.questions', ['questions' => $questions]);
+    }
+
+    private function getQuestionsFromApi( $amount, $difficulty, $type )
+    {
         $client = new Client([
-            'base_uri' => 'https://opentdb.com/api.php',
+            'base_uri' => 'https://opentdb.com/api.php/',
             'verify' => false
         ]);
 
-        $response = $client->get('?amount=1&category=24&difficulty=easy&type=multiple', [
-            // 'query' => [
-            //     'amount' => $amount,
-            //     'difficulty' => $difficulty,
-            //     'type' => $type,
-            // ],
-        ]);
+        $sub_url = "?amount=$amount&difficulty=$difficulty&type=$type";
+        // return $sub_url;
+        $response = $client->get($sub_url);
 
-        // Parse the response
         $data = json_decode($response->getBody(), true);
 
-        // Assuming the structure of the Open Trivia Database response
         $questions = $data['results'];
 
-        // You can now handle these questions, store them in the database, or pass them to a view
-        // For simplicity, let's just return them in this example
-        return $data;
+        $fetchedQuestions = $this->sortAndValidate($questions);
+
+        return $fetchedQuestions;
     }
-
-    public function index()
+    public function sortAndValidate($questionsArray)
     {
+        $filteredQuestions = array_filter($questionsArray, function ($question) {
+            if (!str_contains($question['category'], 'Entertainment')) {
+                return $question;
+            }
+        });
 
-        // Your logic for handling the root path
-        return view('trivia.index');
+        usort($filteredQuestions, function ($a, $b) {
+            return strcmp($a['category'], $b['category']);
+        });
+
+        //combine correct and inccorect answers and shuffle
+
+        foreach ($filteredQuestions as &$question) {
+            // Combine correct_answer and incorrect_answers into a new property
+            $question['all_answers'] = array_merge([$question['correct_answer']], $question['incorrect_answers']);
+        
+            // Shuffle the answers
+            shuffle($question['all_answers']);
+        }
+        
+        // Unset the reference to avoid potential issues
+        // unset($filteredQuestions);
+
+        return $filteredQuestions;
     }
 }

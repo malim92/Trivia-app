@@ -38,22 +38,21 @@
             </div>
             <div class="form-group">
                 <label for="questions-num" >Number of questions</label>
-                <input type="number" class="form-control" id="questions-num" name="questions-num" required>
+                <input type="number" class="form-control" id="questions-num" max=50 name="questions-num" required>
             </div>
             <div class="form-group">
                 <label for="difficulty">Select difficulty</label>
-                <select class="form-control" name="difficulty" id="difficulty">
-                    <option value="any">Any difficulty</option>
+                <select class="form-control" name="difficulty" id="difficulty" required>
                     <option value="easy">Easy</option>
-                    <option value="mediun">Mediun</option>
+                    <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="type">Select type</label>
                 <select class="form-control" name="type" id="type">
-                    <option value="mc">Multiple Choice</option>
-                    <option value="tf">True/False</option>
+                    <option value="multiple">Multiple Choice</option>
+                    <option value="boolean">True/False</option>
                 </select>
             </div>
             
