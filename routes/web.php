@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TriviaController;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +17,11 @@ use App\Http\Controllers\TriviaController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
 Route::get('/', [TriviaController::class, 'index']);
 // Route::post('/submit', 'TriviaController@submit');
+
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::post('/fetch-questions', [TriviaController::class, 'fetchQuestions'])->name('trivia.fetchQuestions');
