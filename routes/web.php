@@ -26,3 +26,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/questions', [TriviaController::class, 'fetchQuestions'])->name('questions.index');
 
 Route::post('/fetch-questions', [TriviaController::class, 'fetchQuestions'])->name('trivia.fetchQuestions');
+
+//not used
+Route::post('/submit-form', [TriviaController::class, 'submitForm'])->name('submitForm');

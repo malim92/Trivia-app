@@ -23,10 +23,8 @@
     <div class="container mt-4">
         <h1 class="mb-4 title-home">Welcome to the Trivia App!</h1>
 
-        <!-- Your Bootstrap-styled content goes here -->
         <form action="{{ route('trivia.fetchQuestions') }}" method="post">
             @csrf
-            <!-- Your form fields go here -->
             <div class="form-group">
                 <label for="fullName" placeholder="First name">Full Name</label>
                 <input type="text" class="form-control" id="fullName" name="fullName" required>
@@ -56,9 +54,6 @@
                 </select>
             </div>
             
-
-            <!-- Other form fields... -->
-
             <button type="submit" class="btn btn-primary">Start Trivia</button>
         </form>
     </div>
